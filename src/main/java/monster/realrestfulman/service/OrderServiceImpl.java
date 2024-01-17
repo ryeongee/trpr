@@ -1,5 +1,8 @@
 package monster.realrestfulman.service;
 
+import lombok.RequiredArgsConstructor;
+import monster.realrestfulman.entity.Order;
+import monster.realrestfulman.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,6 +10,11 @@ import org.springframework.stereotype.Service;
  * Description :
  */
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
-
+    private final OrderRepository orderRepository;
+    @Override
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
 }

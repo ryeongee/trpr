@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import monster.realrestfulman.aop.TraceInfo;
 import monster.realrestfulman.controller.dto.OrderRequest;
+import monster.realrestfulman.entity.Order;
+import monster.realrestfulman.entity.Product;
+import monster.realrestfulman.entity.ProductList;
 import monster.realrestfulman.service.OrderService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +31,6 @@ public class OrderController {
         log.info("주문내역::상품=" + request.getProductName() + ":가격=" + request.getAmount());
         Map<String, String> body = new HashMap<>();
         body.put("msg", "주문 완료!");
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("traceInfo", servletRequest.getHeader("traceInfo"));
         return ResponseEntity.ok().headers(headers).body(body);
@@ -38,6 +39,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> postOrder2(@TraceInfo String traceInfo, @RequestBody OrderRequest request) {
         log.info("주문내역::상품=" + request.getProductName() + ":가격=" + request.getAmount());
+        Order order = new Order(new ProductList(new Product(request.getProductName(), request.getAmount())), request.getAmount());
+        orderService.save(order);
         HttpHeaders headers = new HttpHeaders();
         headers.add("traceInfo", traceInfo);
         Map<String, String> body = new HashMap<>();
